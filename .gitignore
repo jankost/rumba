@@ -29,5 +29,4 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-bin/pl/edu/pw/fizyka/sk/Config.class
-bin/pl/edu/pw/fizyka/sk/*.class
+bin/*.*
