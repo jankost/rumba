@@ -5,7 +5,7 @@ import java.net.DatagramSocket;
 
 public class Client {
 	
-	int _portNumber = Config.PORT;
+	private int _portNumber = Config.PORT;
 	
 	public void QueryLan (int _portNumber){
 		
