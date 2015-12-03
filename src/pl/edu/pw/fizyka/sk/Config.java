@@ -7,6 +7,7 @@ public class Config {
 	
     public static final int PORT = 2137;
     public static final int BUFFER_SIZE = 1024;
+	public static int PORT1;
 
 
 

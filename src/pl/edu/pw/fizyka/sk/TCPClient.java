@@ -3,17 +3,12 @@ package pl.edu.pw.fizyka.sk;
 import java.io.Console;
 import java.net.DatagramSocket;
 
-public class Client {
-	
-	private int _portNumber = Config.PORT;
+public class TCPClient {
 	
 	public void QueryLan (int _portNumber){
 		
 	}
 	
-	public void AnswerLanQuery (int _portNumber){
-		
-	}
 
 	//TODO
 	//User Interface:
