@@ -3,7 +3,7 @@ package pl.edu.pw.fizyka.sk;
 import java.io.Console;
 import java.net.DatagramSocket;
 
-public class TCPClient {
+public class TCPSender {
 	
 	public void QueryLan (int _portNumber){
 		
