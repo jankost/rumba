@@ -4,14 +4,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class UDPQuery implements Runnable{
 	
-	private String ownAddress;
+	private InetAddress ownIP;
+	private int ownListenerPort;
 	private String partialMessage;
-	private DatagramSocket udpSocket;
-	private DatagramPacket udpPacket;
+	//public DatagramSocket udpSocket;
+	public DatagramPacket udpPacket;
 	private byte[] bitPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
@@ -20,69 +26,65 @@ public class UDPQuery implements Runnable{
 	public UDPQuery(AppData appData)
 	{
 		this.appData = appData;
-		ownAddress = GetLocalhostIP();
+		ownIP = Config.IP;
+		ownListenerPort = 21137;
 		partialMessage = "RQM";
 		queryAddress = Config.IP;
 		queryPort = Config.DefaultUDPQueryPort;
+		bitPacket = ConstructMessage(partialMessage).getBytes(StandardCharsets.UTF_8);
+		udpPacket = ConstructPacket(bitPacket);
 	}
 	
-	private String GetLocalhostIP()
+	private InetAddress GetLocalhostIP()
 	{
 		String _ret;
-		try {
-			_ret = InetAddress.getLocalHost().toString();
-		} catch (UnknownHostException e) {
-			_ret = "FAIL";
-		}
-		return _ret;
+		_ret = "127.0.0.1";
+		return InetAddress.getLoopbackAddress();
 	}
 	
-	private byte[] ConstructMessageBytes(String input)
+	private String ConstructMessage(String input)
 	{
 		String _msg; 
-		ownAddress = GetLocalhostIP();
-		if(ownAddress != "FAIL"){
-			_msg = new String(ownAddress + ";" + partialMessage);
-			try {
-				bitPacket = _msg.getBytes("utf8");
-				return bitPacket;
-			} 
-			catch (UnsupportedEncodingException e) {	
-			}
-		 }
-		return "0".getBytes();
+		ownIP = GetLocalhostIP();
+		_msg = new String(input + ";" + ";" + ownListenerPort);
+		return _msg;
 	}
 	
-	private boolean ConstructPacket()
+	private DatagramPacket ConstructPacket(byte[] msgBytes)
 	{
-		try{
-			udpPacket = new DatagramPacket(bitPacket, bitPacket.length);
-			udpPacket.setAddress(queryAddress);
-			udpPacket.setPort(queryPort);
-			return true;
-		}
-		catch(Exception e){
-		
-		}
-		return false;
-	}
-	
-	public boolean Query()
-	{
-		//ConstructMessageBytes();
-		return true;
+			DatagramPacket datagramPacket = new DatagramPacket(bitPacket, bitPacket.length);
+			datagramPacket.setAddress(queryAddress);
+			datagramPacket.setPort(21137);
+			return datagramPacket;
+
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		byte[] rqm = "RQM".getBytes();
-		try {
-			udpSocket.send(new DatagramPacket(rqm, rqm.length, Config.IP, Config.DefaultUDPListenerPort));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void run()
+	{
+		System.out.println(partialMessage);
+		System.out.println(bitPacket.hashCode());
+		System.out.println(udpPacket);
+		DatagramSocket udpSocket;
+		try 
+		{
+			udpSocket = new DatagramSocket(21138);
+			try 
+			{
+				udpSocket.send(udpPacket);
+			}
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 		}
+		catch (SocketException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+			
+		
 	}
 	
 }

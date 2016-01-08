@@ -2,7 +2,7 @@ package pl.edu.pw.fizyka.sk;
 
 public class Application {
 	
-	public static void main(String[] args){
+	public static void main(){
 		AppData data = new AppData();
 		UDPListener udpListener = new  UDPListener(data);
 		UDPQuery udpQuery = new UDPQuery(data);

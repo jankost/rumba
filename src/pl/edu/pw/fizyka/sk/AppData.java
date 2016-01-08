@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AppData {
-	
+	Config config = new Config();
 	final List<InetAddress> peers = new CopyOnWriteArrayList<>();
 	final Map<InetAddress, List<String>> files = new ConcurrentHashMap<>();
 	
