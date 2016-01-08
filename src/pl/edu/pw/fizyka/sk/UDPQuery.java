@@ -13,14 +13,16 @@ public class UDPQuery implements Runnable{
 	private DatagramSocket udpSocket;
 	private DatagramPacket udpPacket;
 	private byte[] bitPacket;
-	private InetAddress queryBroadcastAddress;
+	private InetAddress queryAddress;
 	private int queryPort;
+	private final AppData appData; 
 	
-	public UDPQuery()
+	public UDPQuery(AppData appData)
 	{
+		this.appData = appData;
 		ownAddress = GetLocalhostIP();
 		partialMessage = "RQM";
-		queryBroadcastAddress = Config.DefaultUDPQueryPort;
+		queryAddress = Config.IP;
 		queryPort = Config.DefaultUDPQueryPort;
 	}
 	
@@ -55,7 +57,7 @@ public class UDPQuery implements Runnable{
 	{
 		try{
 			udpPacket = new DatagramPacket(bitPacket, bitPacket.length);
-			udpPacket.setAddress(queryBroadcastAddress);
+			udpPacket.setAddress(queryAddress);
 			udpPacket.setPort(queryPort);
 			return true;
 		}
@@ -67,14 +69,20 @@ public class UDPQuery implements Runnable{
 	
 	public boolean Query()
 	{
-		ConstructMessageBytes();
+		//ConstructMessageBytes();
 		return true;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		byte[] rqm = "RQM".getBytes();
+		try {
+			udpSocket.send(new DatagramPacket(rqm, rqm.length, Config.IP, Config.DefaultUDPListenerPort));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

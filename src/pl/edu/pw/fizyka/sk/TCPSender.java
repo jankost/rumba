@@ -6,6 +6,12 @@ import java.net.InetAddress;
 
 public class TCPSender implements Runnable{
 	
+	private final AppData appData; 
+	
+	public TCPSender(AppData appData){
+		this.appData = appData;
+	}
+	
 	public void Sendfile (InetAddress IP, int _portNumber, String _filePath){
 		
 	}

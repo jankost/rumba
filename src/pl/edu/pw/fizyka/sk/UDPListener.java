@@ -8,7 +8,7 @@ import java.net.InetAddress;
 
 public class UDPListener implements Runnable{
 
-	private DatagramSocket receiveSocket;
+	private DatagramSocket datagramSocket;
 	private byte[] rqmResponse;
 	private DatagramPacket receivedPacket;
 	private int packetLength;
@@ -16,40 +16,30 @@ public class UDPListener implements Runnable{
 	private InetAddress senderAddress;
 	private int senderPort;
 	
-	public UDPListener(){
-		receiveSocket = new DatagramSocket(Config.DefaultUDPListenerPort);
+	private final AppData appData; 
+	
+	public UDPListener(AppData appData){
+		this.appData = appData;
+		datagramSocket = new DatagramSocket(Config.DefaultUDPListenerPort);
 		rqmResponse = "OK".getBytes("utf8");
 		receivedPacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
 	}
-    
-    while (true){
-
-    
-        datagramSocket.receive(reclievedPacket);
-
-        int length = reclievedPacket.getLength();
-        String message =
-                new String(reclievedPacket.getData(), 0, length, "utf8");
-       
-        // Port i host który wysłał nam zapytanie
-        InetAddress address = reclievedPacket.getAddress();
-        int port = reclievedPacket.getPort();
-
-        System.out.println(message + ' ' + address.toString() + ' ' + port);
-      //  Thread.sleep(5000); //To oczekiwanie nie jest potrzebne dla
-        // obsługi gniazda
-
-        DatagramPacket response
-                = new DatagramPacket(
-                    byteResponse, byteResponse.length, address, port);
-
-        datagramSocket.send(response);
-
-    }
+   
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		 
+	    while (true){
+  	        datagramSocket.receive(receivedPacket);
+	        packetLength = receivedPacket.getLength();
+	        packetMessage = new String(receivedPacket.getData(), 0, packetLength, "utf8");
+	        senderAddress = receivedPacket.getAddress();
+	        senderPort = receivedPacket.getPort();
+	        System.out.println(packetMessage + ' ' + senderAddress.toString() + ' ' + senderPort);
+	        byte[] rrm = "RRM".getBytes("utf8");
+	        DatagramPacket response = new DatagramPacket(rrm, rrm.length, senderAddress, senderPort);
+	        datagramSocket.send(response);
+	    }
 		
 	}
 

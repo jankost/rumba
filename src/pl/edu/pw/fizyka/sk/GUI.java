@@ -47,8 +47,7 @@ public class GUI {
 	//controls.setSize(new Dimension(387, 273));
 	listConnections.setBackground(Color.DARK_GRAY);
 	gui.add(listConnections, c);
-	
-	UDPQuery udpQuery = new UDPQuery();
+
     }
 
     private static void createAndShowGUI() {
