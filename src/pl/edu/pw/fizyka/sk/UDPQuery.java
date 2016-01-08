@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class UDPQuery {
+public class UDPQuery implements Runnable{
 	
 	private String ownAddress;
 	private String partialMessage;
@@ -20,7 +20,7 @@ public class UDPQuery {
 	{
 		ownAddress = GetLocalhostIP();
 		partialMessage = "RQM";
-		queryBroadcastAddress = InetAddress.getByName("192.168.0.255");
+		queryBroadcastAddress = Config.DefaultUDPQueryPort;
 		queryPort = Config.DefaultUDPQueryPort;
 	}
 	
@@ -43,12 +43,12 @@ public class UDPQuery {
 			_msg = new String(ownAddress + ";" + partialMessage);
 			try {
 				bitPacket = _msg.getBytes("utf8");
-				return true;
+				return bitPacket;
 			} 
 			catch (UnsupportedEncodingException e) {	
 			}
 		 }
-		return false;
+		return "0".getBytes();
 	}
 	
 	private boolean ConstructPacket()
@@ -69,6 +69,12 @@ public class UDPQuery {
 	{
 		ConstructMessageBytes();
 		return true;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

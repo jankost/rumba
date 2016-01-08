@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class UDPListener {
+public class UDPListener implements Runnable{
 
 	private DatagramSocket receiveSocket;
 	private byte[] rqmResponse;
@@ -46,5 +46,11 @@ public class UDPListener {
         datagramSocket.send(response);
 
     }
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -2,10 +2,17 @@ package pl.edu.pw.fizyka.sk;
 
 import java.io.Console;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 
-public class TCPSender {
+public class TCPSender implements Runnable{
 	
-	public void QueryLan (int _portNumber){
+	public void Sendfile (InetAddress IP, int _portNumber, String _filePath){
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		
 	}
 	

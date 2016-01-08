@@ -1,6 +1,6 @@
 package pl.edu.pw.fizyka.sk;
 
-public class TCPReceiver {
+public class TCPReceiver implements Runnable{
 	
 	public TCPReceiver(){
 		
@@ -8,6 +8,11 @@ public class TCPReceiver {
 	
 	public void ReceiveFile (int _portNumber){
 		
+	}
+
+	@Override
+	public void run() {
+		ReceiveFile(Config.DefaultTCPReceiverPort);
 	}
 
 }
