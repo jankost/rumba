@@ -1,11 +1,7 @@
 package pl.edu.pw.fizyka.sk;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -27,52 +23,55 @@ public class UDPQuery implements Runnable{
 	{
 		this.appData = appData;
 		ownIP = Config.IP;
-		ownListenerPort = 21137;
-		partialMessage = "RQM";
+		ownListenerPort = Config.DefaultUDPListenerPort;
 		queryAddress = Config.IP;
 		queryPort = Config.DefaultUDPQueryPort;
-		bitPacket = ConstructMessage(partialMessage).getBytes(StandardCharsets.UTF_8);
-		udpPacket = ConstructPacket(bitPacket);
+
 	}
 	
 	private InetAddress GetLocalhostIP()
 	{
-		String _ret;
-		_ret = "127.0.0.1";
-		return InetAddress.getLoopbackAddress();
+
+		try {
+			InetAddress add = InetAddress.getLocalHost();
+			return add;
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private String ConstructMessage(String input)
 	{
-		String _msg; 
-		ownIP = GetLocalhostIP();
-		_msg = new String(input + ";" + ";" + ownListenerPort);
+		String _msg;
+		_msg = new String(input + ";" + ownListenerPort);
 		return _msg;
 	}
 	
 	private DatagramPacket ConstructPacket(byte[] msgBytes)
 	{
-			DatagramPacket datagramPacket = new DatagramPacket(bitPacket, bitPacket.length);
+			DatagramPacket datagramPacket = new DatagramPacket(msgBytes, msgBytes.length);
 			datagramPacket.setAddress(queryAddress);
-			datagramPacket.setPort(21137);
+			datagramPacket.setPort(ownListenerPort);
 			return datagramPacket;
 
 	}
 
-	public void run()
-	{
+	public void Query(){
+		bitPacket = ConstructMessage("RQM").getBytes(StandardCharsets.UTF_8);
+		udpPacket = ConstructPacket(bitPacket);
 		System.out.println(partialMessage);
 		System.out.println(bitPacket.hashCode());
 		System.out.println(udpPacket);
 		DatagramSocket udpSocket;
-		try 
+		try
 		{
-			udpSocket = new DatagramSocket(21138);
-			try 
+			udpSocket = new DatagramSocket(queryPort);
+			try
 			{
-				udpSocket.send(udpPacket);
+					udpSocket.send(udpPacket);
 			}
-			catch (IOException e) 
+			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -82,9 +81,11 @@ public class UDPQuery implements Runnable{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-			
-		
+	}
+
+	public void run()
+	{
+		Query();
 	}
 	
 }

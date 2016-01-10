@@ -1,7 +1,17 @@
 package pl.edu.pw.fizyka.sk;
 
 public class Application {
-	
+//	AppData data;
+//	UDPListener udpListener;
+//	UDPQuery udpQuery;
+//	TCPReceiver tcpReceiver;
+//	TCPSender tcpSender;
+
+	public Application (){
+
+
+	}
+
 	public static void main(){
 		AppData data = new AppData();
 		UDPListener udpListener = new  UDPListener(data);

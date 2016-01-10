@@ -14,7 +14,7 @@ public class Config {
     public static final InetAddress IP;
     static {
         try{
-            IP = InetAddress.getByName("127.0.0.1");
+            IP = InetAddress.getLocalHost();
         }catch (UnknownHostException e){
             throw new RuntimeException(e);
         }

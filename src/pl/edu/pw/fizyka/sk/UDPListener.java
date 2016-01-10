@@ -40,7 +40,7 @@ public class UDPListener implements Runnable{
 				        packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
 				        senderAddress = receivedPacket.getAddress();
 				        senderPort = receivedPacket.getPort();
-				        System.out.println("wazna wiadomosc od: " + packetMessage + ' ' + senderAddress.toString() + ' ' + senderPort);
+				        System.out.println("Packet reveived from : " + packetMessage + ' ' + senderAddress.toString() + ' ' + senderPort);
 //				        byte[] rrm = "RRM".getBytes("utf8");
 //				        DatagramPacket response = new DatagramPacket(rrm, rrm.length, senderAddress, senderPort);
 //				        datagramSocket.send(response);
