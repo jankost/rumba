@@ -12,20 +12,20 @@ public class UDPQuery implements Runnable{
 	private InetAddress ownIP;
 	private int ownListenerPort;
 	private String partialMessage;
-	//public DatagramSocket udpSocket;
+	public DatagramSocket udpSocket;
 	public DatagramPacket udpPacket;
 	private byte[] bitPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
 	private final AppData appData; 
 	
-	public UDPQuery(AppData appData)
+	public UDPQuery(AppData appdata)
 	{
-		this.appData = appData;
+		appData = appdata;
 		ownIP = Config.IP;
-		ownListenerPort = Config.DefaultUDPListenerPort;
+		ownListenerPort = appData.UDPListenerPort;
 		queryAddress = Config.IP;
-		queryPort = Config.DefaultUDPQueryPort;
+		queryPort = appData.UDPQueryPort;
 
 	}
 	
@@ -63,10 +63,6 @@ public class UDPQuery implements Runnable{
 		System.out.println(partialMessage);
 		System.out.println(bitPacket.hashCode());
 		System.out.println(udpPacket);
-		DatagramSocket udpSocket;
-		try
-		{
-			udpSocket = new DatagramSocket(queryPort);
 			try
 			{
 					udpSocket.send(udpPacket);
@@ -75,17 +71,29 @@ public class UDPQuery implements Runnable{
 			{
 				e.printStackTrace();
 			}
-		}
-		catch (SocketException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 	}
 
 	public void run()
 	{
-		Query();
+		try {
+			udpSocket = new DatagramSocket(appData.UDPQueryPort);
+			while(true) {
+				Query();
+				try
+				{
+					Thread.sleep(2500);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		catch (SocketException e1)
+		{
+			e1.printStackTrace();
+		}
 	}
 	
 }

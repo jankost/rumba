@@ -1,19 +1,10 @@
 package pl.edu.pw.fizyka.sk;
 
 public class Application {
-//	AppData data;
-//	UDPListener udpListener;
-//	UDPQuery udpQuery;
-//	TCPReceiver tcpReceiver;
-//	TCPSender tcpSender;
 
-	public Application (){
-
-
-	}
-
-	public static void main(){
-		AppData data = new AppData();
+	public static void main(int instanceID){
+		System.out.println(instanceID);
+		AppData data = new AppData(instanceID);
 		UDPListener udpListener = new  UDPListener(data);
 		UDPQuery udpQuery = new UDPQuery(data);
 		TCPReceiver tcpReceiver = new  TCPReceiver(data);

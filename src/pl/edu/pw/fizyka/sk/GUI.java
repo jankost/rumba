@@ -1,10 +1,9 @@
 package pl.edu.pw.fizyka.sk;
 
 import java.awt.*;
+import java.util.Objects;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class GUI {
     final static boolean shouldFill = true;
@@ -26,6 +25,7 @@ public class GUI {
 	listClients.setLayout(null);
 	listClients.setPreferredSize(new Dimension(420, 450));
 	listClients.setBackground(Color.BLUE);
+		JTextArea instance = new JTextArea();
 	gui.add(listClients, c);
 
 	c.gridx = 1;
@@ -64,11 +64,21 @@ public class GUI {
     }
 
     public static void main(String[] args) {
+		int instanceID;
+		if(Objects.equals(args[0], "main")){
+			instanceID = 0;
+		}
+		else
+		{
+			instanceID = 2;
+		}
+
+
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }
         });
-        Application.main();
+        Application.main(instanceID);
     }
 }

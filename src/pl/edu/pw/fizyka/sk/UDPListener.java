@@ -24,40 +24,40 @@ public class UDPListener implements Runnable{
 		this.appData = appData;
 		receivedPacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
 	}
-   
 
-	@Override
-	public void run() {
-		try {
-			datagramSocket = new DatagramSocket(21137);
-			try {
+	public void run()
+	{
+		try
+		{
+			datagramSocket = new DatagramSocket(appData.UDPListenerPort);
+			try
+			{
 				rqmResponse = "OK".getBytes("utf8");
 				System.out.println("Listening to UDP calls");
-				while (true){
-		  	        try {
+				while (true)
+				{
+		  	        try
+					{
 						datagramSocket.receive(receivedPacket);
 						packetLength = receivedPacket.getLength();
 				        packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
 				        senderAddress = receivedPacket.getAddress();
 				        senderPort = receivedPacket.getPort();
 				        System.out.println("Packet reveived from : " + packetMessage + ' ' + senderAddress.toString() + ' ' + senderPort);
-//				        byte[] rrm = "RRM".getBytes("utf8");
-//				        DatagramPacket response = new DatagramPacket(rrm, rrm.length, senderAddress, senderPort);
-//				        datagramSocket.send(response);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
+					}
+					catch (IOException e)
+					{
 						e.printStackTrace();
 					}
-			        
 			    }
-				
-				
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (UnsupportedEncodingException e)
+			{
 				e.printStackTrace();
 			}
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (SocketException e)
+		{
 			e.printStackTrace();
 		}
 		
