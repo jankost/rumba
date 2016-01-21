@@ -14,7 +14,7 @@ public class AppData {
 	public int UDPQueryPort;
 	public int TCPReceiverPort;//
 	public int TCPSenderPort;
-	public List<InetAddress> peers;
+	public List <InetAddress> peers;
 	public List<String> ownFiles;
 	Map<InetAddress, List<String>> files;
 

@@ -39,11 +39,7 @@ public class UDPListener implements Runnable{
 		  	        try
 					{
 						datagramSocket.receive(receivedPacket);
-						packetLength = receivedPacket.getLength();
-				        packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
-				        senderAddress = receivedPacket.getAddress();
-				        senderPort = receivedPacket.getPort();
-				        System.out.println("Packet reveived from : " + packetMessage + ' ' + senderAddress.toString() + ' ' + senderPort);
+						DetectPacketType(receivedPacket);					
 					}
 					catch (IOException e)
 					{
@@ -60,9 +56,35 @@ public class UDPListener implements Runnable{
 		{
 			e.printStackTrace();
 		}
-		
-	    
-		
+	}
+	
+	public String IP(InetAddress address){
+		return address.toString().substring(1,10);
 	}
 
+	public boolean DetectPacketType(DatagramPacket packet){
+		packetLength = packet.getLength();
+        packetMessage = new String(packet.getData(), 0, packetLength, StandardCharsets.UTF_8);
+        senderAddress = packet.getAddress();
+        String senderIP = IP(senderAddress);
+        senderPort = packet.getPort();
+        String rumbaType = packetMessage.substring(0,3);
+        System.out.println("Packet received from : " + rumbaType + ' ' + senderAddress.toString().substring(1,10) + ':' + senderPort);
+        switch(rumbaType){
+        case "RQM":
+        	appData.peers.add(senderAddress);
+        	System.out.println("Rozmiar = " + appData.peers.size());
+//        	int len = appData.peers.size();
+//        	for(int i=0;i<8;i++){
+//        		System.out.println(i + " " + IP(appData.peers.get(i)));
+//        		return true;
+//        	}
+        	
+        case "RFM":
+        	System.out.println("LOL");
+        default:
+        	System.out.println("xD");
+        }
+		return false;
+	}
 }

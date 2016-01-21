@@ -1,7 +1,20 @@
 package pl.edu.pw.fizyka.sk;
 
 public class Application {
-
+	
+	
+	public boolean AddClient(){
+		
+		return true;
+	}
+	
+	public boolean RemoveClient(){
+		
+		return true;
+	}
+	
+	
+	
 	public static void main(int instanceID){
 		System.out.println(instanceID);
 		AppData data = new AppData(instanceID);
@@ -9,6 +22,7 @@ public class Application {
 		UDPQuery udpQuery = new UDPQuery(data);
 		TCPReceiver tcpReceiver = new  TCPReceiver(data);
 		TCPSender tcpSender = new  TCPSender(data);
+//		data.peers.put(key, value)
 		
 		Thread UDPQueryThread = new Thread(udpQuery);
 		Thread UDPListenerThread = new Thread(udpListener);
@@ -17,6 +31,11 @@ public class Application {
 		UDPListenerThread.start();
 		//jeśli użytownik dopiero się włącza do sieci, należy wysłać zapytanie po UDP 
 		UDPQueryThread.start();
+		
+		
+		
+		
+		
 	}
 
 }

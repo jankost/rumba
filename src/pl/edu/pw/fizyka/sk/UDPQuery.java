@@ -57,8 +57,8 @@ public class UDPQuery implements Runnable{
 
 	}
 
-	public void Query(){
-		bitPacket = ConstructMessage("RQM").getBytes(StandardCharsets.UTF_8);
+	public void Query(String input){
+		bitPacket = ConstructMessage(input).getBytes(StandardCharsets.UTF_8);
 		udpPacket = ConstructPacket(bitPacket);
 		System.out.println(partialMessage);
 		System.out.println(bitPacket.hashCode());
@@ -79,7 +79,7 @@ public class UDPQuery implements Runnable{
 		try {
 			udpSocket = new DatagramSocket(appData.UDPQueryPort);
 			while(true) {
-				Query();
+				Query("RQM");
 				try
 				{
 					Thread.sleep(2500);
