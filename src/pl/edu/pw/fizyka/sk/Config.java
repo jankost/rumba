@@ -12,4 +12,5 @@ public class Config {
     public static final int DefaultTCPReceiverPort = 8191;
     public static final int BUFFER_SIZE = 1024;	
     public static final InetAddress IP = InetAddress.getLoopbackAddress();
+//    public static final InetAddress Broadcast = InetAddress.getLocalHost().
 }

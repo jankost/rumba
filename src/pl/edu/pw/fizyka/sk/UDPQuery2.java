@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class UDPQuery extends Thread{
+public class UDPQuery2{
 	
 	private static InetAddress ownIP;
 	private int ownListenerPort;
@@ -18,7 +18,7 @@ public class UDPQuery extends Thread{
 	private int queryPort;
 	private final AppData appData; 
 	
-	public UDPQuery(AppData appdata)
+	public UDPQuery2(AppData appdata)
 	{
 		appData = appdata;
 		ownListenerPort = appData.UDPListenerPort;
@@ -55,6 +55,16 @@ public class UDPQuery extends Thread{
 	}
 
 	public void Query(InetAddress address, String message){
+		try
+		{
+			udpSocket = new DatagramSocket(appData.UDPQueryPort);
+		} 
+		catch (SocketException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		bitPacket = ConstructMessage(message).getBytes(StandardCharsets.UTF_8);
 		udpPacket = ConstructPacket(bitPacket, address, ownListenerPort);
 			try
@@ -69,27 +79,6 @@ public class UDPQuery extends Thread{
 
 	}
 
-	public void run()
-	{
-		try {
-			udpSocket = new DatagramSocket(appData.UDPQueryPort);
-			while(true) {
-				Query(queryAddress, "RRM");
-				try
-				{
-					Thread.sleep(2500);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		catch (SocketException e1)
-		{
-			e1.printStackTrace();
-		}
-	}
 	
 }
 

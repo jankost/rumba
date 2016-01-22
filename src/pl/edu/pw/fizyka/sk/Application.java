@@ -19,7 +19,9 @@ public class Application {
 		Thread UDPListenerThread = new Thread(udpListener);
 	//	Thread TCPReceiverThread = new Thread(tcpReceiver);
 	//	Thread TCPSenderThread = new Thread(tcpSender);
-		UDPListenerThread.start(); 
+		UDPListenerThread.start();
+		UDPQuery2 udp = new UDPQuery2(data);
+//		udp.Query(, message);
 		UDPQueryThread.start();
 		
 		
