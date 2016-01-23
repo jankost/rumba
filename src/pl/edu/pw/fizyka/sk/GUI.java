@@ -29,7 +29,9 @@ public class GUI extends JFrame{
     	listClients.setLayout(null);
     	listClients.setPreferredSize(new Dimension(420, 450));
     	listClients.setBackground(Color.BLUE);
-    		JTextArea instance = new JTextArea();
+    	JTextArea instance = new JTextArea();
+		instance.setPreferredSize(new Dimension(300,400));
+		listClients.add(instance);
     	gui.add(listClients, c);
 
     	c.gridx = 1;

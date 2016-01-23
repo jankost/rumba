@@ -14,29 +14,37 @@ public class UDPQuery extends Thread{
 	public DatagramSocket udpSocket;
 	public DatagramPacket udpPacket;
 	private byte[] bitPacket;
-	private static InetAddress queryAddress;
+	private InetAddress queryAddress;
 	private int queryPort;
 	private final AppData appData; 
 	
-	public UDPQuery(AppData appdata)
+	public UDPQuery(AppData appdata, InetAddress address, String message)
 	{
 		appData = appdata;
 		ownListenerPort = appData.UDPListenerPort;
-		queryPort = appData.UDPQueryPort;
-
-	}
-	static{
 		try {
-			queryAddress = InetAddress.getByName("10.68.255.255");
-			System.out.println("emil - " + queryAddress.getHostAddress());
-			ownIP = InetAddress.getLocalHost();
-			System.out.println("ja - " + ownIP.getHostAddress());
-		} 
-		catch (UnknownHostException e) 
+			queryAddress = InetAddress.getByName("192.168.0.255");
+			System.out.println("Broadcast: " + queryAddress.getHostAddress());
+		}
+		catch (UnknownHostException e)
 		{
 			e.printStackTrace();
 		}
+		queryPort = appData.UDPQueryPort;
+
 	}
+//	static{
+//		try {
+//			queryAddress = InetAddress.getByName("192.168.0.255");
+//			System.out.println("emil - " + queryAddress.getHostAddress());
+////			ownIP = InetAddress.getLocalHost();
+////			System.out.println("ja - " + ownIP.getHostAddress());
+//		}
+//		catch (UnknownHostException e)
+//		{
+//			e.printStackTrace();
+//		}
+//	}
 
 	private String ConstructMessage(String input)
 	{
