@@ -34,7 +34,6 @@ public class UDPListener implements Runnable{
 	        senderAddress = receivedPacket.getAddress();
 	        senderPort = receivedPacket.getPort();
 	        String messageType = packetMessage.substring(0,3);
-	        String messageContents = packetMessage.substring(3, packetMessage.length());
 	        System.out.println(messageType + " packet received from : " + senderAddress.toString() + ":" + senderPort);
 			switch(messageType){
 				case "RQM":
@@ -69,15 +68,15 @@ public class UDPListener implements Runnable{
 					System.out.println(appData.ownFiles.toString());
 					try 
 					{
-						List<String> paths = new CopyOnWriteArrayList<>();
-						
-						
-						
+						String messageContents = packetMessage.substring(4, packetMessage.length());
+						String[] files = messageContents.split(";");
+						List<String> paths = new CopyOnWriteArrayList<>(files);
 						UDPQuery rof = new UDPQuery(appData, senderAddress, queryType.ROF);
 						Thread rofthr = new Thread(rof);
 						rofthr.run();
 						AddFiles(senderAddress, paths);
 						rofthr.join();
+						System.out.println(paths);
 					}
 					catch (InterruptedException e)
 					{
@@ -85,7 +84,11 @@ public class UDPListener implements Runnable{
 					}
 					break;
 				case "ROF":
-					AddToList(senderAddress, messageType);
+					String messageContents = packetMessage.substring(4, packetMessage.length());
+					String[] files = messageContents.split(";");
+					List<String> paths = new CopyOnWriteArrayList<>(files);
+//					System.out.println(messageContents);
+					AddFiles(senderAddress, paths);
 					break;
 				default:
 					break;
