@@ -48,7 +48,7 @@ public class GUI extends JFrame{
     		
     		@Override
     		public void actionPerformed(ActionEvent arg0) {
-    			UDPQuery query = new UDPQuery(appdata);
+//    			UDPQuery query = new UDPQuery(appdata);
     			
     		}
     	});

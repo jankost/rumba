@@ -1,25 +1,64 @@
 package pl.edu.pw.fizyka.sk;
 
-import java.io.Console;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.*;
+import java.net.*;
 
 public class TCPSender implements Runnable{
 	
 	private final AppData appData; 
+	InetAddress tcpAddress;
 	
 	public TCPSender(AppData appData){
 		this.appData = appData;
+	}
+	
+	public boolean EstabilishTcpConnection(InetAddress address, int port){
+		try {
+			Socket s = new Socket(address, port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	public void Sendfile (InetAddress IP, int _portNumber, String _filePath){
 		
 	}
 
-	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+        try 
+        {
+        	tcpAddress = InetAddress.getLocalHost();
+			Socket socket = new Socket(tcpAddress, 41000);
+        	BufferedWriter bufferedWriter;
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			bufferedWriter.write("TCP connection test!\n");
+			bufferedWriter.flush();
+			bufferedWriter.write("END");
+			bufferedWriter.flush();
+			System.out.println("Message has ben sent!");
+			socket.close();
+		} 
+        catch (IOException e) 
+        {
+			e.printStackTrace();
+		}
+        
+//        String line;
+//		try {
+//			line = reader.readLine();
+//			while (line!=null)
+//			{
+//	            System.out.println(line);
+//	            System.out.flush();
+//	            line = reader.readLine();
+//			}
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+        
 	}
 	
 

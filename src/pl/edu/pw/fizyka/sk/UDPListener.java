@@ -30,7 +30,7 @@ public class UDPListener implements Runnable{
 	        senderAddress = receivedPacket.getAddress();
 	        String messageType = packetMessage.substring(0,3);
 //	        System.out.println(messageType);
-	        System.out.println(messageType + " packet reveived from : " + senderAddress.toString() + ":" + senderPort);
+	        System.out.println(messageType + " packet received from : " + senderAddress.toString() + ":" + senderPort);
 			switch(messageType){
 				case "RQM":
 					AddToList(senderAddress, messageType);

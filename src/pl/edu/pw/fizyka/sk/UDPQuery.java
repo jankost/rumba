@@ -23,8 +23,8 @@ public class UDPQuery extends Thread{
 		appData = appdata;
 		ownListenerPort = appData.UDPListenerPort;
 		try {
-			queryAddress = InetAddress.getByName("192.168.0.255");
-			System.out.println("Broadcast: " + queryAddress.getHostAddress());
+			queryAddress = InetAddress.getByName("10.68.17.64");
+			System.out.println("UDP packet sent for: " + queryAddress.getHostAddress());
 		}
 		catch (UnknownHostException e)
 		{
