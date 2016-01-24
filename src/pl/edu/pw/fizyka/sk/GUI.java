@@ -3,6 +3,7 @@ package pl.edu.pw.fizyka.sk;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Objects;
 
 import javax.management.Query;
@@ -25,33 +26,58 @@ public class GUI extends JFrame{
     	c.gridy = 0;
     	
     	//List of clients, their files 
-    	JPanel listClients = new JPanel();
-    	listClients.setLayout(null);
-    	listClients.setPreferredSize(new Dimension(420, 450));
-    	listClients.setBackground(Color.BLUE);
-    	JTextArea instance = new JTextArea();
-		instance.setPreferredSize(new Dimension(300,400));
-		listClients.add(instance);
-    	gui.add(listClients, c);
+    	JPanel listClientsPanel = new JPanel();
+    	listClientsPanel.setLayout(null);
+    	listClientsPanel.setPreferredSize(new Dimension(420, 450));
+    	listClientsPanel.setBackground(Color.BLUE);
+    	listClientsPanel.setLayout(new BorderLayout());
 
+    	JTextArea peers = new JTextArea();
+//    	peers.setSize(40, 60);
+		peers.setLineWrap(false);
+		peers.setEditable(false);
+		peers.setVisible(true);
+    	JScrollPane pane = new JScrollPane(peers);
+    	pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    	pane.setVisible(true);
+
+		listClientsPanel.add(pane, BorderLayout.SOUTH);
+    	gui.add(listClientsPanel, c);
+    	
     	c.gridx = 1;
     	/* List of own files */
     	JPanel listFiles = new JPanel();
     	listFiles.setLayout(null);
     	listFiles.setPreferredSize(new Dimension(420, 450));
-    	//controls.setSize(new Dimension(387, 273));
     	listFiles.setBackground(Color.GRAY);
-    	gui.add(listFiles, c);
     	
-    	JButton button = new JButton("Foo");
+    	final JFileChooser fileChooser = new JFileChooser();
+    	JButton button = new JButton("Choose a file!");
     	button.addActionListener(new ActionListener() {
     		
     		@Override
     		public void actionPerformed(ActionEvent arg0) {
-//    			UDPQuery query = new UDPQuery(appdata);
+    			int chosen = fileChooser.showOpenDialog(gui);
+    			if (chosen == JFileChooser.APPROVE_OPTION){
+    				File file = fileChooser.getSelectedFile();
+    				String name = file.getName();
+    				String path = file.getAbsolutePath();
+    				if(appdata.ownFiles.contains(path)){
+    					System.out.println("Plik już jest udostepniany!");
+    				}
+    				else{
+    					appdata.ownFiles.add(path);
+    				}
+    			}
     			
     		}
     	});
+    	gui.add(button);
+    	
+    	JTextArea ownfiles = new JTextArea();
+    	gui.add(ownfiles);
+    	
+    	gui.add(listFiles, c);
 
     	c.gridx = 0;
     	c.gridy = 1;

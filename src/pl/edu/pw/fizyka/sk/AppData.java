@@ -33,7 +33,12 @@ public class AppData {
 		peers = new CopyOnWriteArrayList<>();
 		files = new ConcurrentHashMap<>();
 		ownFiles = new CopyOnWriteArrayList<>();
+		ownFiles.add("C:\\system32\\explorer.exe");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Hans\\Desktop\\zaba.png");
 	}
+	
+	
 
 	
 

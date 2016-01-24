@@ -18,7 +18,6 @@ public class TCPSender implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		return false;
 	}
 	
@@ -44,21 +43,6 @@ public class TCPSender implements Runnable{
         {
 			e.printStackTrace();
 		}
-        
-//        String line;
-//		try {
-//			line = reader.readLine();
-//			while (line!=null)
-//			{
-//	            System.out.println(line);
-//	            System.out.flush();
-//	            line = reader.readLine();
-//			}
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
 	}
 	
 

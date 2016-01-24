@@ -11,51 +11,48 @@ public class UDPQuery extends Thread{
 	
 	private static InetAddress ownIP;
 	private int ownListenerPort;
+	private String message;
 	public DatagramSocket udpSocket;
 	public DatagramPacket udpPacket;
 	private byte[] bitPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
 	private final AppData appData; 
+	public enum queryType{
+		RQM, RRM, RFR, ROF
+	}
 	
-	public UDPQuery(AppData appdata, InetAddress address, String message)
+	public UDPQuery(AppData appdata, InetAddress address, queryType type)
 	{
-		appData = appdata;
+		
+		this.appData = appdata;
 		ownListenerPort = appData.UDPListenerPort;
-		try {
-			queryAddress = InetAddress.getByName("10.68.17.64");
-			System.out.println("UDP packet sent for: " + queryAddress.getHostAddress());
-		}
-		catch (UnknownHostException e)
-		{
-			e.printStackTrace();
-		}
+		queryAddress = address;
 		queryPort = appData.UDPQueryPort;
-
+		this.message = type.name();
+		queryPort = appData.UDPQueryPort;
+		switch(message){
+			case "RRM":
+				queryPort++;
+				break;
+			case "RFR":
+				queryPort+=2;
+				break;
+			case "ROF":
+				queryPort+=3;
+				break;
+			default:
+				break;
+		}
 	}
-//	static{
-//		try {
-//			queryAddress = InetAddress.getByName("192.168.0.255");
-//			System.out.println("emil - " + queryAddress.getHostAddress());
-////			ownIP = InetAddress.getLocalHost();
-////			System.out.println("ja - " + ownIP.getHostAddress());
-//		}
-//		catch (UnknownHostException e)
-//		{
-//			e.printStackTrace();
-//		}
+
+//	private String ConstructMessage(String input)
+//	{
+//		return new String(input + ";" + ownListenerPort);
 //	}
-
-	private String ConstructMessage(String input)
-	{
-		String _msg;
-		_msg = new String(input + ";" + ownListenerPort);
-		return _msg;
-	}
 	
 	private DatagramPacket ConstructPacket(byte[] msgBytes, InetAddress address, int port)
 	{
-		
 			DatagramPacket datagramPacket = new DatagramPacket(msgBytes, msgBytes.length);
 			datagramPacket.setAddress(address);
 			datagramPacket.setPort(port);
@@ -63,12 +60,12 @@ public class UDPQuery extends Thread{
 	}
 
 	public void Query(InetAddress address, String message){
-		bitPacket = ConstructMessage(message).getBytes(StandardCharsets.UTF_8);
+		bitPacket = message.getBytes(StandardCharsets.UTF_8);
 		udpPacket = ConstructPacket(bitPacket, address, ownListenerPort);
 			try
 			{
 					udpSocket.send(udpPacket);
-					System.out.println("Pakiet wysłany!");
+					System.out.println(message + " packet sent");
 			}
 			catch (IOException e)
 			{
@@ -80,18 +77,22 @@ public class UDPQuery extends Thread{
 	public void run()
 	{
 		try {
-			udpSocket = new DatagramSocket(appData.UDPQueryPort);
-			while(true) {
-				Query(queryAddress, "RRM");
+			udpSocket = new DatagramSocket(queryPort);
 				try
 				{
-					Thread.sleep(2500);
+					Thread.sleep(2000);
+					if(message == "RFR" | message == "ROF"){
+						for (int i=0; i< appData.ownFiles.size(); i++){
+							message = message + ";" + appData.ownFiles.get(i).toString();
+						}
+					}
+					Query(queryAddress, message);
 				}
 				catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				}
-			}
+			udpSocket.close();
 		}
 		catch (SocketException e1)
 		{

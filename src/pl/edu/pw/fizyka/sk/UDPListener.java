@@ -7,6 +7,10 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import pl.edu.pw.fizyka.sk.UDPQuery.queryType;
 
 public class UDPListener implements Runnable{
 
@@ -28,38 +32,88 @@ public class UDPListener implements Runnable{
 			packetLength = receivedPacket.getLength();
 	        packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
 	        senderAddress = receivedPacket.getAddress();
+	        senderPort = receivedPacket.getPort();
 	        String messageType = packetMessage.substring(0,3);
-//	        System.out.println(messageType);
+	        String messageContents = packetMessage.substring(3, packetMessage.length());
 	        System.out.println(messageType + " packet received from : " + senderAddress.toString() + ":" + senderPort);
 			switch(messageType){
 				case "RQM":
-					AddToList(senderAddress, messageType);
-					UDPQuery2 udp = new UDPQuery2(appData);
-					udp.Query(senderAddress, "RRM");
-					//send a rrm back to sender
+					try 
+					{
+						UDPQuery rrm = new UDPQuery(appData, senderAddress, queryType.RRM);
+						Thread rrmthr = new Thread(rrm);
+						rrmthr.run();
+						AddToList(senderAddress, messageType);
+						rrmthr.join();
+					} 
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
 					break;
 				case "RRM":
-					AddToList(senderAddress, messageType);
+					try 
+					{
+						UDPQuery rfr = new UDPQuery(appData, senderAddress, queryType.RFR);
+						Thread rfrthr = new Thread(rfr);
+						rfrthr.run();
+						AddToList(senderAddress, messageType);
+						rfrthr.join();
+					}
+					catch (InterruptedException e)
+					{
+					e.printStackTrace();
+					}
 					break;
-				case "RFL":
-					//send a file list back to sender
+				case "RFR":
+					System.out.println(appData.ownFiles.toString());
+					try 
+					{
+						List<String> paths = new CopyOnWriteArrayList<>();
+						
+						
+						
+						UDPQuery rof = new UDPQuery(appData, senderAddress, queryType.ROF);
+						Thread rofthr = new Thread(rof);
+						rofthr.run();
+						AddFiles(senderAddress, paths);
+						rofthr.join();
+					}
+					catch (InterruptedException e)
+					{
+					e.printStackTrace();
+					}
+					break;
+				case "ROF":
+					AddToList(senderAddress, messageType);
 					break;
 				default:
 					break;
 			}
-						return true;
+			return true;
 		}
-		
 		return false;
 	}
 	
 	public boolean AddToList(InetAddress newAddress, String msgType){
 		if(! appData.peers.contains(newAddress)){
 			appData.peers.add(newAddress);
-			System.out.println("Dopisano nowy adres " + msgType + "do listy!");
+			System.out.println("Dopisano nowy adres " + msgType + " do listy!");
 			return true;			
 		}
 		System.out.println("Nie dopisano do listy, adres istnieje!");
+		return false;
+	}
+	
+	public boolean AddFiles(InetAddress owner, List<String> paths){
+		if(appData.files.containsKey(owner)){
+			appData.files.get(owner).addAll(paths);
+			return true;
+		}
+		else{
+			appData.files.put(owner, paths);
+		}
+		
 		return false;
 	}
 
@@ -87,9 +141,5 @@ public class UDPListener implements Runnable{
 		{
 			e.printStackTrace();
 		}
-		
-	    
-		
 	}
-
 }
