@@ -12,5 +12,13 @@ public class Config {
     public static final int DefaultTCPReceiverPort = 8191;
     public static final int BUFFER_SIZE = 1024;	
     public static final InetAddress IP = InetAddress.getLoopbackAddress();
-//    public static final InetAddress Broadcast = InetAddress.getLocalHost().
+    public static InetAddress broadcastIp = null;
+    static
+    {
+		try {
+			broadcastIp = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+    }
 }

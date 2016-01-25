@@ -34,6 +34,38 @@ public class AppData {
 		ownFiles.add("C:\\Users\\Hans\\Desktop\\lfm.txt"); //Ten plik się kopiuje w TCP!
 		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
 		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
+		ownFiles.add("C:\\Program Files\\Java\\javaw.exe");
+		ownFiles.add("C:\\Users\\Bajdetzki\\Desktop\\zaba.png");
 		isFirstRun = 1;
 	}
 	

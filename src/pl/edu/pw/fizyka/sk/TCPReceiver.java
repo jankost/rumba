@@ -11,18 +11,12 @@ public class TCPReceiver implements Runnable{
     private OutputStream out;
     private ServerSocket serverSocket;
     private Socket socket;
+    private File file;
 	
-	public TCPReceiver(AppData appData)
+	public TCPReceiver(AppData appData, File file)
 	{
 		this.appData = appData;
-//		try 
-//		{
-//			serverSocket = new ServerSocket(56000);
-//		}
-//		catch (IOException e) 
-//		{
-//			e.printStackTrace();
-//		}
+		this.file = file;
 	}
 	
 	@Override
@@ -39,13 +33,15 @@ public class TCPReceiver implements Runnable{
 		            in = socket.getInputStream();
 			        try 
 			        {
-			            out = new FileOutputStream("E:\\PROBA.txt");
+			        	System.out.println("--------Ready to receive file--------");
+			            out = new FileOutputStream(file.getAbsolutePath());
 			            byte[] bytes = new byte[16*1024];
 						
 				        int count;
 				        while ((count = in.read(bytes)) > 0) {
 				            out.write(bytes, 0, count);
 				        }
+				        System.out.println("--------File received--------");
 			        } 
 			        catch (FileNotFoundException ex)
 			        {

@@ -12,14 +12,15 @@ public class TCPSender implements Runnable{
 	File file;
 	InputStream in;
 	
-	public TCPSender(AppData appData, int fileID){
+	public TCPSender(AppData appData, InetAddress sendTo, int fileID){
 		this.appData = appData;
-		file = new File(appData.ownFiles.get(fileID));
+		tcpAddress = sendTo;
+		file = new File(appData.ownFiles.get(0));
 	}
 
 	public void run() {
         try {
-			socket = new Socket(Config.IP, 44444);
+			socket = new Socket(tcpAddress, 44444);
 	        byte[] bytes = new byte[16 * 1024];
 			try 
 			{
@@ -30,10 +31,12 @@ public class TCPSender implements Runnable{
 					int count;
 			        try 
 			        {
+			        	System.out.println("--------File is being sent--------");
 						while ((count = in.read(bytes)) > 0)
 						{
 						    out.write(bytes, 0, count);
 						}
+						System.out.println("--------File sent!--------");
 					}
 			        catch (IOException e)
 			        {

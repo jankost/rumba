@@ -7,6 +7,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -67,7 +69,7 @@ public class UDPListener implements Runnable{
 					}
 					break;
 				case "RFR":
-					System.out.println(appData.ownFiles.toString());
+//					System.out.println(appData.ownFiles.toString());
 					try 
 					{
 						String messageContents = packetMessage.substring(4, packetMessage.length());
@@ -78,7 +80,7 @@ public class UDPListener implements Runnable{
 						rofthr.run();
 						AddFiles(senderAddress, paths);
 						rofthr.join();
-						System.out.println("Pliki zdalne to: " + paths);
+//						System.out.println("Pliki zdalne to: " + paths);
 					}
 					catch (InterruptedException e)
 					{
@@ -91,6 +93,12 @@ public class UDPListener implements Runnable{
 					List<String> paths = new CopyOnWriteArrayList<>(files);
 					AddFiles(senderAddress, paths);
 					break;
+				case "RSF":
+					String id = packetMessage.substring(4, packetMessage.length());
+					int fileId = id.charAt(0);
+					TCPSender rsf = new TCPSender(appData, senderAddress, fileId);
+					Thread rsfthr = new Thread(rsf);
+					rsfthr.start();
 				default:
 					appData.isFirstRun = 1;
 					break;
@@ -103,10 +111,10 @@ public class UDPListener implements Runnable{
 	public boolean AddToList(InetAddress newAddress, String msgType){
 		if(! appData.peers.contains(newAddress)){
 			appData.peers.add(newAddress);
-			System.out.println("Dopisano nowy adres " + msgType + " do listy!");
+			System.out.println("A new client " + msgType + " has been added!");
 			return true;			
 		}
-		System.out.println("Nie dopisano do listy, adres istnieje!");
+		System.out.println("Address already on the list!");
 		return false;
 	}
 	

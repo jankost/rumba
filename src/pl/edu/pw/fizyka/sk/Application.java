@@ -1,6 +1,8 @@
 package pl.edu.pw.fizyka.sk;
 
 import java.awt.Dimension;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -13,19 +15,11 @@ public class Application {
 		System.out.println("Rumba running!");
 		final AppData data = new AppData();
 		UDPListener udpListener = new  UDPListener(data);
-		UDPQuery udpQuery = new UDPQuery(data, Config.IP, queryType.RQM);
-		TCPReceiver tcpReceiver = new  TCPReceiver(data);
-		TCPSender tcpSender = new  TCPSender(data,0);
-		
+		UDPQuery udpQuery = new UDPQuery(data, Config.broadcastIp, queryType.RQM);
 		Thread UDPQueryThread = new Thread(udpQuery);
 		Thread UDPListenerThread = new Thread(udpListener);
-		Thread TCPReceiverThread = new Thread(tcpReceiver);
-		Thread TCPSenderThread = new Thread(tcpSender);
-//		UDPListenerThread.start();
-//		UDPQueryThread.start();
-		TCPReceiverThread.start();
-		TCPSenderThread.start();
-		
+		UDPListenerThread.start();
+		UDPQueryThread.start();
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -35,9 +29,5 @@ public class Application {
 				gui.setVisible(true);
 			}
 		});
-		
-		
-		
 	}
-
 }
