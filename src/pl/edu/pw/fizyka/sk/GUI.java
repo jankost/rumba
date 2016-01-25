@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Objects;
-
-import javax.management.Query;
 import javax.swing.*;
 
 public class GUI extends JFrame{
@@ -27,13 +24,14 @@ public class GUI extends JFrame{
     	
     	//List of clients, their files 
     	JPanel listClientsPanel = new JPanel();
-    	listClientsPanel.setLayout(null);
     	listClientsPanel.setPreferredSize(new Dimension(420, 450));
     	listClientsPanel.setBackground(Color.BLUE);
     	listClientsPanel.setLayout(new BorderLayout());
 
     	JTextArea peers = new JTextArea();
-//    	peers.setSize(40, 60);
+    	for(int i=0;i<appdata.ownFiles.size();i++){
+    		peers.append(appdata.ownFiles.get(i)+ "\n");
+    	}
 		peers.setLineWrap(false);
 		peers.setEditable(false);
 		peers.setVisible(true);
@@ -41,7 +39,7 @@ public class GUI extends JFrame{
     	pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     	pane.setVisible(true);
 
-		listClientsPanel.add(pane, BorderLayout.SOUTH);
+		listClientsPanel.add(pane, BorderLayout.CENTER);
     	gui.add(listClientsPanel, c);
     	
     	c.gridx = 1;
@@ -82,11 +80,9 @@ public class GUI extends JFrame{
     	c.gridx = 0;
     	c.gridy = 1;
     	c.gridwidth = 2;
-    	/* List of own files */
     	JPanel listConnections = new JPanel();
     	listConnections.setLayout(null);
     	listConnections.setPreferredSize(new Dimension(840, 150));
-    	//controls.setSize(new Dimension(387, 273));
     	listConnections.setBackground(Color.DARK_GRAY);
     	gui.add(listConnections, c);
 

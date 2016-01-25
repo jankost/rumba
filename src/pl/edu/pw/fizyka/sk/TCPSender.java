@@ -6,40 +6,58 @@ import java.net.*;
 public class TCPSender implements Runnable{
 	
 	private final AppData appData; 
+	private OutputStream out;
+	private Socket socket;
 	InetAddress tcpAddress;
+	File file;
+	InputStream in;
 	
-	public TCPSender(AppData appData){
+	public TCPSender(AppData appData, int fileID){
 		this.appData = appData;
-	}
-	
-	public boolean EstabilishTcpConnection(InetAddress address, int port){
-		try {
-			Socket s = new Socket(address, port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	public void Sendfile (InetAddress IP, int _portNumber, String _filePath){
-		
+		file = new File(appData.ownFiles.get(fileID));
 	}
 
 	public void run() {
-        try 
-        {
-        	tcpAddress = InetAddress.getLocalHost();
-			Socket socket = new Socket(tcpAddress, 41000);
-        	BufferedWriter bufferedWriter;
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			bufferedWriter.write("TCP connection test!\n");
-			bufferedWriter.flush();
-			bufferedWriter.write("END");
-			bufferedWriter.flush();
-			System.out.println("Message has ben sent!");
+        try {
+			socket = new Socket(Config.IP, 44444);
+	        byte[] bytes = new byte[16 * 1024];
+			try 
+			{
+				in = new FileInputStream(file);
+				try 
+				{
+					out = socket.getOutputStream();
+					int count;
+			        try 
+			        {
+						while ((count = in.read(bytes)) > 0)
+						{
+						    out.write(bytes, 0, count);
+						}
+					}
+			        catch (IOException e)
+			        {
+						e.printStackTrace();
+					}
+			        out.close();
+				} 
+				catch (IOException e) 
+				{
+				e.printStackTrace();
+				}
+				in.close();
+			} 
+			catch (FileNotFoundException e) 
+			{
+			e.printStackTrace();
+			}
 			socket.close();
+        } 
+        catch (UnknownHostException e)
+        {
+			e.printStackTrace();
 		} 
-        catch (IOException e) 
+        catch (IOException e)
         {
 			e.printStackTrace();
 		}

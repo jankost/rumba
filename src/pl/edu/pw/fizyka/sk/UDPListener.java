@@ -39,6 +39,7 @@ public class UDPListener implements Runnable{
 				case "RQM":
 					try 
 					{
+						appData.isFirstRun = 0;
 						UDPQuery rrm = new UDPQuery(appData, senderAddress, queryType.RRM);
 						Thread rrmthr = new Thread(rrm);
 						rrmthr.run();
@@ -53,6 +54,7 @@ public class UDPListener implements Runnable{
 				case "RRM":
 					try 
 					{
+						appData.isFirstRun = 0;
 						UDPQuery rfr = new UDPQuery(appData, senderAddress, queryType.RFR);
 						Thread rfrthr = new Thread(rfr);
 						rfrthr.run();
@@ -76,7 +78,7 @@ public class UDPListener implements Runnable{
 						rofthr.run();
 						AddFiles(senderAddress, paths);
 						rofthr.join();
-						System.out.println(paths);
+						System.out.println("Pliki zdalne to: " + paths);
 					}
 					catch (InterruptedException e)
 					{
@@ -87,10 +89,10 @@ public class UDPListener implements Runnable{
 					String messageContents = packetMessage.substring(4, packetMessage.length());
 					String[] files = messageContents.split(";");
 					List<String> paths = new CopyOnWriteArrayList<>(files);
-//					System.out.println(messageContents);
 					AddFiles(senderAddress, paths);
 					break;
 				default:
+					appData.isFirstRun = 1;
 					break;
 			}
 			return true;
@@ -110,7 +112,7 @@ public class UDPListener implements Runnable{
 	
 	public boolean AddFiles(InetAddress owner, List<String> paths){
 		if(appData.files.containsKey(owner)){
-			appData.files.get(owner).addAll(paths);
+			appData.files.replace(owner, paths);
 			return true;
 		}
 		else{
