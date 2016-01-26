@@ -1,41 +1,33 @@
 package pl.edu.pw.fizyka.sk;
 
+import java.awt.Dimension;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import pl.edu.pw.fizyka.sk.UDPQuery.queryType;
+
 public class Application {
-	
-	
-	public boolean AddClient(){
-		
-		return true;
-	}
-	
-	public boolean RemoveClient(){
-		
-		return true;
-	}
-	
-	
-	
-	public static void main(int instanceID){
-		System.out.println(instanceID);
-		AppData data = new AppData(instanceID);
+
+	public static void main(String[] args){
+		System.out.println("Rumba running!");
+		final AppData data = new AppData();
 		UDPListener udpListener = new  UDPListener(data);
-		UDPQuery udpQuery = new UDPQuery(data);
-		TCPReceiver tcpReceiver = new  TCPReceiver(data);
-		TCPSender tcpSender = new  TCPSender(data);
-//		data.peers.put(key, value)
-		
+		UDPQuery udpQuery = new UDPQuery(data, Config.broadcastIp, queryType.RQM);
 		Thread UDPQueryThread = new Thread(udpQuery);
 		Thread UDPListenerThread = new Thread(udpListener);
-	//	Thread TCPReceiverThread = new Thread(tcpReceiver);
-	//	Thread TCPSenderThread = new Thread(tcpSender);
 		UDPListenerThread.start();
-		//jeśli użytownik dopiero się włącza do sieci, należy wysłać zapytanie po UDP 
 		UDPQueryThread.start();
-		
-		
-		
-		
-		
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				GUI gui = new GUI(data);
+				gui.setSize(new Dimension(860, 640));
+				gui.setVisible(true);
+			}
+		});
 	}
-
 }

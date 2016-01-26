@@ -1,25 +1,69 @@
 package pl.edu.pw.fizyka.sk;
 
-import java.io.Console;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.*;
+import java.net.*;
 
 public class TCPSender implements Runnable{
 	
 	private final AppData appData; 
+	private OutputStream out;
+	private Socket socket;
+	InetAddress tcpAddress;
+	File file;
+	InputStream in;
 	
-	public TCPSender(AppData appData){
+	public TCPSender(AppData appData, InetAddress sendTo, int fileID){
 		this.appData = appData;
-	}
-	
-	public void Sendfile (InetAddress IP, int _portNumber, String _filePath){
-		
+		tcpAddress = sendTo;
+		file = new File(appData.ownFiles.get(0));
 	}
 
-	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+        try {
+			socket = new Socket(tcpAddress, 44444);
+	        byte[] bytes = new byte[16 * 1024];
+			try 
+			{
+				in = new FileInputStream(file);
+				try 
+				{
+					out = socket.getOutputStream();
+					int count;
+			        try 
+			        {
+			        	System.out.println("--------File is being sent--------");
+						while ((count = in.read(bytes)) > 0)
+						{
+						    out.write(bytes, 0, count);
+						}
+						System.out.println("--------File sent!--------");
+					}
+			        catch (IOException e)
+			        {
+						e.printStackTrace();
+					}
+			        out.close();
+				} 
+				catch (IOException e) 
+				{
+				e.printStackTrace();
+				}
+				in.close();
+			} 
+			catch (FileNotFoundException e) 
+			{
+			e.printStackTrace();
+			}
+			socket.close();
+        } 
+        catch (UnknownHostException e)
+        {
+			e.printStackTrace();
+		} 
+        catch (IOException e)
+        {
+			e.printStackTrace();
+		}
 	}
 	
 

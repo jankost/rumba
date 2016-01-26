@@ -7,65 +7,68 @@ import java.nio.charset.StandardCharsets;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class UDPQuery implements Runnable{
+public class UDPQuery extends Thread{
 	
-	private InetAddress ownIP;
 	private int ownListenerPort;
-	private String partialMessage;
+	private String message;
 	public DatagramSocket udpSocket;
 	public DatagramPacket udpPacket;
 	private byte[] bitPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
 	private final AppData appData; 
+	public enum queryType{
+		RQM, RRM, RFR, ROF, RSF
+	}
+	private int fileId;
 	
-	public UDPQuery(AppData appdata)
+	public UDPQuery(AppData appdata, InetAddress address, queryType type)
 	{
-		appData = appdata;
-		ownIP = Config.IP;
+		this.appData = appdata;
+		fileId = 0;
 		ownListenerPort = appData.UDPListenerPort;
-		queryAddress = Config.IP;
+		queryAddress = address;
 		queryPort = appData.UDPQueryPort;
-
-	}
-	
-	private InetAddress GetLocalhostIP()
-	{
-
-		try {
-			InetAddress add = InetAddress.getLocalHost();
-			return add;
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		this.message = type.name();
+		queryPort = appData.UDPQueryPort;
+		switch(message){
+			case "RRM":
+				queryPort++;
+				break;
+			case "RFR":
+				queryPort+=2;
+				break;
+			case "ROF":
+				queryPort+=3;
+				break;
+			case "RSF":
+				queryPort+=4;
+				break;
+			default:
+				break;
 		}
-		return null;
+	}
+
+	public UDPQuery(AppData appdata, int fileID, InetAddress address){
+		this(appdata, address, queryType.RSF);
+		fileId = fileID;
 	}
 	
-	private String ConstructMessage(String input)
-	{
-		String _msg;
-		_msg = new String(input + ";" + ownListenerPort);
-		return _msg;
-	}
-	
-	private DatagramPacket ConstructPacket(byte[] msgBytes)
+	private DatagramPacket ConstructPacket(byte[] msgBytes, InetAddress address, int port)
 	{
 			DatagramPacket datagramPacket = new DatagramPacket(msgBytes, msgBytes.length);
-			datagramPacket.setAddress(queryAddress);
-			datagramPacket.setPort(ownListenerPort);
+			datagramPacket.setAddress(address);
+			datagramPacket.setPort(port);
 			return datagramPacket;
-
 	}
 
-	public void Query(String input){
-		bitPacket = ConstructMessage(input).getBytes(StandardCharsets.UTF_8);
-		udpPacket = ConstructPacket(bitPacket);
-		System.out.println(partialMessage);
-		System.out.println(bitPacket.hashCode());
-		System.out.println(udpPacket);
+	public void Query(InetAddress address, String message){
+		bitPacket = message.getBytes(StandardCharsets.UTF_8);
+		udpPacket = ConstructPacket(bitPacket, address, ownListenerPort);
 			try
 			{
 					udpSocket.send(udpPacket);
+					System.out.println("Packet: " + message + " sent!");
 			}
 			catch (IOException e)
 			{
@@ -77,18 +80,25 @@ public class UDPQuery implements Runnable{
 	public void run()
 	{
 		try {
-			udpSocket = new DatagramSocket(appData.UDPQueryPort);
-			while(true) {
-				Query("RQM");
+			udpSocket = new DatagramSocket(queryPort);
 				try
 				{
-					Thread.sleep(2500);
+					Thread.sleep(2000);
+					if(message == "RFR" | message == "ROF"){
+						for (int i=0; i< appData.ownFiles.size(); i++){
+							message = message + ";" + appData.ownFiles.get(i).toString();
+						}
+					}
+					if(message == "RSF"){
+						message = message + ";" + fileId;
+					}
+					Query(queryAddress, message);
 				}
 				catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				}
-			}
+			udpSocket.close();
 		}
 		catch (SocketException e1)
 		{
