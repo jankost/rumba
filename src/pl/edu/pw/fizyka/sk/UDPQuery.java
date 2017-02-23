@@ -4,6 +4,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+@SuppressWarnings("SameParameterValue")
 public class UDPQuery extends Thread{
 	
 	private int ownListenerPort;
@@ -12,15 +13,15 @@ public class UDPQuery extends Thread{
 	private DatagramPacket udpPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
-	private final AppData appData; 
+	private AppData appData;
 	public enum queryType{
 		RQM, RRM, RFR, ROF, RSF
 	}
 	private int fileId;
 	
-	public UDPQuery(AppData appdata, InetAddress address, queryType type)
+	public UDPQuery(InetAddress address, queryType type)
 	{
-		this.appData = appdata;
+		this.appData = AppData.getInstance();
 		fileId = 0;
 		ownListenerPort = appData.UDPListenerPort;
 		queryAddress = address;
@@ -45,8 +46,8 @@ public class UDPQuery extends Thread{
 		}
 	}
 
-	public UDPQuery(AppData appdata, int fileID, InetAddress address){
-		this(appdata, address, queryType.RSF);
+	public UDPQuery(int fileID, InetAddress address){
+		this(address, queryType.RSF);
 		fileId = fileID;
 	}
 	

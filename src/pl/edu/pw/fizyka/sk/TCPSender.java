@@ -8,10 +8,14 @@ class TCPSender implements Runnable{
 	private InetAddress tcpAddress;
 	private File file;
 	private InputStream in;
+	private AppData appData;
+	private Config config;
 	
-	TCPSender(AppData appData, InetAddress sendTo, int fileID){
+	TCPSender(InetAddress sendTo, int fileID){
 		tcpAddress = sendTo;
 		file = new File(appData.ownFiles.get(0));
+		appData = AppData.getInstance();
+		config = Config.getInstance();
 	}
 
 	public void run() {

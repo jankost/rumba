@@ -24,9 +24,9 @@ class Config {
 		}
     }
 
-    public Config getInstance(){
-        if(config != null) return config;
-        else
-            return new Config();
+    public static Config getInstance(){
+        if(config == null)
+            config = new Config();
+        return config;
     }
 }

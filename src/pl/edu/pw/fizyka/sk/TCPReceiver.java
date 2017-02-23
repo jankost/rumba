@@ -9,10 +9,14 @@ class TCPReceiver implements Runnable{
     private OutputStream out;
 	private Socket socket;
     private File file;
-	
-	public TCPReceiver(AppData appData, File file)
+    private AppData appData;
+	private Config config;
+
+	public TCPReceiver(File file)
 	{
 		this.file = file;
+		appData = AppData.getInstance();
+		config = Config.getInstance();
 	}
 	
 	@Override

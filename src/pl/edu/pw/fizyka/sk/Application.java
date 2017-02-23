@@ -10,15 +10,16 @@ class Application {
 
 	public static void main(String[] args){
 		System.out.println("Rumba running!");
-		final AppData data = new AppData();
-		UDPListener udpListener = new  UDPListener(data);
-		UDPQuery udpQuery = new UDPQuery(data, Config.broadcastIp, queryType.RQM);
+		AppData data = AppData.getInstance();
+		Config config = Config.getInstance();
+		UDPListener udpListener = new  UDPListener();
+		UDPQuery udpQuery = new UDPQuery(config.broadcastIp, queryType.RQM);
 		Thread UDPQueryThread = new Thread(udpQuery);
 		Thread UDPListenerThread = new Thread(udpListener);
 		UDPListenerThread.start();
 		UDPQueryThread.start();
 		SwingUtilities.invokeLater(() -> {
-            GUI gui = new GUI(data);
+            GUI gui = new GUI();
             gui.setSize(new Dimension(860, 640));
             gui.setVisible(true);
         });

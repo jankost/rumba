@@ -5,9 +5,9 @@ class Thread1 extends Thread {
 	
 	private AppData data;
 	
-	public Thread1(AppData data) {
+	public Thread1() {
 		super();
-		this.data = data; 
+		data = AppData.getInstance();
 	}
 
 	@Override

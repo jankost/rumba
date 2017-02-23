@@ -7,9 +7,9 @@ class Thread2 extends Thread {
 	
 	private AppData data;
 	
-	public Thread2(AppData data) {
+	public Thread2() {
 		super();
-		this.data = data; 
+		data = AppData.getInstance();
 	}
 
 	@Override

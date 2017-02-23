@@ -6,12 +6,13 @@ import java.io.File;
 import javax.swing.*;
 
 class GUI extends JFrame{
-    final static boolean shouldFill = true;
-    final static boolean shouldWeightX = true;
-    final static boolean RIGHT_TO_LEFT = false;
+	private AppData appData;
+	private Config config;
 
-    public GUI(final AppData appdata){
-    	
+    public GUI(){
+
+    	appData = AppData.getInstance();
+    	config = Config.getInstance();
     	JFrame gui = this; 
     	gui.setLayout(new GridBagLayout());
     	GridBagConstraints c = new GridBagConstraints();
@@ -28,8 +29,8 @@ class GUI extends JFrame{
     	listClientsPanel.setLayout(new BorderLayout());
 
     	JTextArea peers = new JTextArea();
-    	for(int i=0;i<appdata.ownFiles.size();i++){
-    		peers.append(appdata.ownFiles.get(i)+ "\n");
+    	for(int i=0;i<appData.ownFiles.size();i++){
+    		peers.append(appData.ownFiles.get(i)+ "\n");
     	}
 		peers.setLineWrap(false);
 		peers.setEditable(false);
@@ -56,11 +57,11 @@ class GUI extends JFrame{
                 File file = fileChooser.getSelectedFile();
                 String name = file.getName();
                 String path = file.getAbsolutePath();
-                if(appdata.ownFiles.contains(path)){
+                if(appData.ownFiles.contains(path)){
                     System.out.println("The chosen file is already being shared!");
                 }
                 else{
-                    appdata.ownFiles.add(path);
+                    appData.ownFiles.add(path);
                 }
             }
 
@@ -74,10 +75,10 @@ class GUI extends JFrame{
             if (result == JFileChooser.CANCEL_OPTION)
                 return;
             File file = jfc.getSelectedFile();
-            TCPReceiver receiver = new TCPReceiver(appdata, file);
+            TCPReceiver receiver = new TCPReceiver(file);
             Thread recthr = new Thread(receiver);
             recthr.start();
-            UDPQuery udp = new UDPQuery(appdata, 0, Config.IP);
+            UDPQuery udp = new UDPQuery(0, config.IP);
             Thread rsf = new Thread(udp);
             rsf.start();
             System.out.println("File path: " + file.getAbsolutePath());

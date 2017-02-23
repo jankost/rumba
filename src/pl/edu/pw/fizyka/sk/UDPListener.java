@@ -15,10 +15,10 @@ class UDPListener implements Runnable{
 
 	private DatagramPacket receivedPacket;
 	Application app;
-	private final AppData appData; 
+	private AppData appData;
 	
-	public UDPListener(AppData appData){
-		this.appData = appData;
+	public UDPListener(){
+		appData = AppData.getInstance();
 	}
 	
 	private boolean CheckPacketType(DatagramPacket packet){
@@ -34,7 +34,7 @@ class UDPListener implements Runnable{
 					try 
 					{
 						appData.isFirstRun = 0;
-						UDPQuery rrm = new UDPQuery(appData, senderAddress, queryType.RRM);
+						UDPQuery rrm = new UDPQuery(senderAddress, queryType.RRM);
 						Thread rrmthr = new Thread(rrm);
 						rrmthr.run();
 						AddToList(senderAddress, messageType);
@@ -49,7 +49,7 @@ class UDPListener implements Runnable{
 					try 
 					{
 						appData.isFirstRun = 0;
-						UDPQuery rfr = new UDPQuery(appData, senderAddress, queryType.RFR);
+						UDPQuery rfr = new UDPQuery(senderAddress, queryType.RFR);
 						Thread rfrthr = new Thread(rfr);
 						rfrthr.run();
 						AddToList(senderAddress, messageType);
@@ -67,7 +67,7 @@ class UDPListener implements Runnable{
 						String messageContents = packetMessage.substring(4, packetMessage.length());
 						String[] files = messageContents.split(";");
 						List<String> paths = new CopyOnWriteArrayList<>(files);
-						UDPQuery rof = new UDPQuery(appData, senderAddress, queryType.ROF);
+						UDPQuery rof = new UDPQuery(senderAddress, queryType.ROF);
 						Thread rofthr = new Thread(rof);
 						rofthr.run();
 						AddFiles(senderAddress, paths);
@@ -88,7 +88,7 @@ class UDPListener implements Runnable{
 				case "RSF":
 					String id = packetMessage.substring(4, packetMessage.length());
 					int fileId = id.charAt(0);
-					TCPSender rsf = new TCPSender(appData, senderAddress, fileId);
+					TCPSender rsf = new TCPSender(senderAddress, fileId);
 					Thread rsfthr = new Thread(rsf);
 					rsfthr.start();
 				default:

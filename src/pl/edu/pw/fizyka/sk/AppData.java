@@ -10,6 +10,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 class AppData {
 
+	private static AppData appdata;
+	Config config;
+
 	int UDPListenerPort;
 	int UDPQueryPort;
 	private int TCPReceiverPort;//
@@ -22,11 +25,18 @@ class AppData {
 	List<String> ownFiles;
 	Map<InetAddress, List<String>> files;
 
-	public AppData (){
-		UDPListenerPort = Config.DefaultUDPListenerPort;
-		UDPQueryPort = Config.DefaultUDPQueryPort;
-		TCPReceiverPort = Config.DefaultTCPReceiverPort;
-		TCPSenderPort = Config.DefaultTCPSenderPort;
+	public static AppData getInstance(){
+		if(appdata == null)
+			appdata = new AppData();
+		return appdata;
+	}
+
+	private AppData (){
+		config = Config.getInstance();
+		UDPListenerPort = config.DefaultUDPListenerPort;
+		UDPQueryPort = config.DefaultUDPQueryPort;
+		TCPReceiverPort = config.DefaultTCPReceiverPort;
+		TCPSenderPort = config.DefaultTCPSenderPort;
 		peers = new CopyOnWriteArrayList<>();
 		files = new ConcurrentHashMap<>();
 		ownFiles = new CopyOnWriteArrayList<>();
