@@ -1,19 +1,15 @@
 package pl.edu.pw.fizyka.sk;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.Objects;
 
 public class UDPQuery extends Thread{
 	
 	private int ownListenerPort;
 	private String message;
-	public DatagramSocket udpSocket;
-	public DatagramPacket udpPacket;
-	private byte[] bitPacket;
+	private DatagramSocket udpSocket;
+	private DatagramPacket udpPacket;
 	private InetAddress queryAddress;
 	private int queryPort;
 	private final AppData appData; 
@@ -62,8 +58,8 @@ public class UDPQuery extends Thread{
 			return datagramPacket;
 	}
 
-	public void Query(InetAddress address, String message){
-		bitPacket = message.getBytes(StandardCharsets.UTF_8);
+	private void Query(InetAddress address, String message){
+		byte[] bitPacket = message.getBytes(StandardCharsets.UTF_8);
 		udpPacket = ConstructPacket(bitPacket, address, ownListenerPort);
 			try
 			{
@@ -84,12 +80,12 @@ public class UDPQuery extends Thread{
 				try
 				{
 					Thread.sleep(2000);
-					if(message == "RFR" | message == "ROF"){
+					if(Objects.equals(message, "RFR") | Objects.equals(message, "ROF")){
 						for (int i=0; i< appData.ownFiles.size(); i++){
-							message = message + ";" + appData.ownFiles.get(i).toString();
+							message = message + ";" + appData.ownFiles.get(i);
 						}
 					}
-					if(message == "RSF"){
+					if(Objects.equals(message, "RSF")){
 						message = message + ";" + fileId;
 					}
 					Query(queryAddress, message);

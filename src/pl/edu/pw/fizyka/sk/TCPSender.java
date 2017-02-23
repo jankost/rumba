@@ -3,31 +3,27 @@ package pl.edu.pw.fizyka.sk;
 import java.io.*;
 import java.net.*;
 
-public class TCPSender implements Runnable{
+class TCPSender implements Runnable{
+
+	private InetAddress tcpAddress;
+	private File file;
+	private InputStream in;
 	
-	private final AppData appData; 
-	private OutputStream out;
-	private Socket socket;
-	InetAddress tcpAddress;
-	File file;
-	InputStream in;
-	
-	public TCPSender(AppData appData, InetAddress sendTo, int fileID){
-		this.appData = appData;
+	TCPSender(AppData appData, InetAddress sendTo, int fileID){
 		tcpAddress = sendTo;
 		file = new File(appData.ownFiles.get(0));
 	}
 
 	public void run() {
         try {
-			socket = new Socket(tcpAddress, 44444);
+			Socket socket = new Socket(tcpAddress, 44444);
 	        byte[] bytes = new byte[16 * 1024];
 			try 
 			{
 				in = new FileInputStream(file);
 				try 
 				{
-					out = socket.getOutputStream();
+					OutputStream out = socket.getOutputStream();
 					int count;
 			        try 
 			        {
@@ -55,12 +51,7 @@ public class TCPSender implements Runnable{
 			e.printStackTrace();
 			}
 			socket.close();
-        } 
-        catch (UnknownHostException e)
-        {
-			e.printStackTrace();
-		} 
-        catch (IOException e)
+        } catch (IOException e)
         {
 			e.printStackTrace();
 		}

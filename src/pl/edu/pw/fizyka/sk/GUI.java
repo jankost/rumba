@@ -1,15 +1,11 @@
 package pl.edu.pw.fizyka.sk;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 
 import javax.swing.*;
 
-public class GUI extends JFrame{
+class GUI extends JFrame{
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
@@ -54,46 +50,38 @@ public class GUI extends JFrame{
     	
     	final JFileChooser fileChooser = new JFileChooser();
     	JButton button = new JButton("Choose a file!");
-    	button.addActionListener(new ActionListener() {
-    		
-    		@Override
-    		public void actionPerformed(ActionEvent arg0) {
-    			int chosen = fileChooser.showOpenDialog(gui);
-    			if (chosen == JFileChooser.APPROVE_OPTION){
-    				File file = fileChooser.getSelectedFile();
-    				String name = file.getName();
-    				String path = file.getAbsolutePath();
-    				if(appdata.ownFiles.contains(path)){
-    					System.out.println("The chosen file is already being shared!");
-    				}
-    				else{
-    					appdata.ownFiles.add(path);
-    				}
-    			}
-    			
-    		}
-    	});
+    	button.addActionListener(arg0 -> {
+            int chosen = fileChooser.showOpenDialog(gui);
+            if (chosen == JFileChooser.APPROVE_OPTION){
+                File file = fileChooser.getSelectedFile();
+                String name = file.getName();
+                String path = file.getAbsolutePath();
+                if(appdata.ownFiles.contains(path)){
+                    System.out.println("The chosen file is already being shared!");
+                }
+                else{
+                    appdata.ownFiles.add(path);
+                }
+            }
+
+        });
     	
     	final JFileChooser jfc = new JFileChooser();
     	JButton sendFile = new JButton("Send a example file");
-    	sendFile.addActionListener(new ActionListener() {
-    		
-    		@Override
-    		public void actionPerformed(ActionEvent arg0) {
-    			
-    			int result = jfc.showSaveDialog(null);
-    			if (result == JFileChooser.CANCEL_OPTION)
-    			    return;
-    			File file = jfc.getSelectedFile();
-    			TCPReceiver receiver = new TCPReceiver(appdata, file);
-    			Thread recthr = new Thread(receiver);
-    			recthr.start();
-    			UDPQuery udp = new UDPQuery(appdata, 0, Config.IP);
-    			Thread rsf = new Thread(udp);
-    			rsf.start();
-    			System.out.println("File path: " + file.getAbsolutePath());
-    		}
-    	});
+    	sendFile.addActionListener(arg0 -> {
+
+            int result = jfc.showSaveDialog(null);
+            if (result == JFileChooser.CANCEL_OPTION)
+                return;
+            File file = jfc.getSelectedFile();
+            TCPReceiver receiver = new TCPReceiver(appdata, file);
+            Thread recthr = new Thread(receiver);
+            recthr.start();
+            UDPQuery udp = new UDPQuery(appdata, 0, Config.IP);
+            Thread rsf = new Thread(udp);
+            rsf.start();
+            System.out.println("File path: " + file.getAbsolutePath());
+        });
     	listFiles.add(sendFile, BorderLayout.WEST);
     	listFiles.add(button, BorderLayout.EAST);
     	

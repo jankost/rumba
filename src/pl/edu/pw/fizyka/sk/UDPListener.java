@@ -1,27 +1,19 @@
 package pl.edu.pw.fizyka.sk;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import pl.edu.pw.fizyka.sk.UDPQuery.queryType;
 
-public class UDPListener implements Runnable{
+class UDPListener implements Runnable{
 
-	private DatagramSocket datagramSocket;
 	private DatagramPacket receivedPacket;
-	private int packetLength;
-	private String packetMessage;
-	private InetAddress senderAddress;
-	private int senderPort;
 	Application app;
 	private final AppData appData; 
 	
@@ -29,12 +21,12 @@ public class UDPListener implements Runnable{
 		this.appData = appData;
 	}
 	
-	public boolean CheckPacketType(DatagramPacket packet){
+	private boolean CheckPacketType(DatagramPacket packet){
 		if(packet != null){
-			packetLength = receivedPacket.getLength();
-	        packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
-	        senderAddress = receivedPacket.getAddress();
-	        senderPort = receivedPacket.getPort();
+			int packetLength = receivedPacket.getLength();
+			String packetMessage = new String(receivedPacket.getData(), 0, packetLength, StandardCharsets.UTF_8);
+			InetAddress senderAddress = receivedPacket.getAddress();
+			int senderPort = receivedPacket.getPort();
 	        String messageType = packetMessage.substring(0,3);
 	        System.out.println(messageType + " packet received from : " + senderAddress.toString() + ":" + senderPort);
 			switch(messageType){
@@ -108,7 +100,7 @@ public class UDPListener implements Runnable{
 		return false;
 	}
 	
-	public boolean AddToList(InetAddress newAddress, String msgType){
+	private boolean AddToList(InetAddress newAddress, String msgType){
 		if(! appData.peers.contains(newAddress)){
 			appData.peers.add(newAddress);
 			System.out.println("A new client " + msgType + " has been added!");
@@ -118,7 +110,7 @@ public class UDPListener implements Runnable{
 		return false;
 	}
 	
-	public boolean AddFiles(InetAddress owner, List<String> paths){
+	private boolean AddFiles(InetAddress owner, List<String> paths){
 		if(appData.files.containsKey(owner)){
 			appData.files.replace(owner, paths);
 			return true;
@@ -134,7 +126,7 @@ public class UDPListener implements Runnable{
 	{
 		try
 		{
-			datagramSocket = new DatagramSocket(appData.UDPListenerPort);
+			DatagramSocket datagramSocket = new DatagramSocket(appData.UDPListenerPort);
 			System.out.println("Listening to UDP calls");
 			while (true)
 			{

@@ -1,11 +1,9 @@
 package pl.edu.pw.fizyka.sk;
 
-import java.util.concurrent.TimeUnit;
-
-public class Thread1 extends Thread {
+class Thread1 extends Thread {
 	
 	
-	AppData data;
+	private AppData data;
 	
 	public Thread1(AppData data) {
 		super();

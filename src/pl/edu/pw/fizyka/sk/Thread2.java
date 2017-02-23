@@ -2,10 +2,10 @@ package pl.edu.pw.fizyka.sk;
 
 import java.util.concurrent.TimeUnit;
 
-public class Thread2 extends Thread {
+class Thread2 extends Thread {
 	
 	
-	AppData data;
+	private AppData data;
 	
 	public Thread2(AppData data) {
 		super();
@@ -18,7 +18,7 @@ public class Thread2 extends Thread {
 		data.lock.lock();
 		try{
 			data.condition.await(1, TimeUnit.DAYS);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 			
 		}finally{
 			data.lock.unlock();

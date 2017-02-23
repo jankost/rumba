@@ -3,19 +3,15 @@ package pl.edu.pw.fizyka.sk;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-public class TCPReceiver implements Runnable{
-	private final AppData appData;
-    private InputStream in;
+class TCPReceiver implements Runnable{
+	private InputStream in;
     private OutputStream out;
-    private ServerSocket serverSocket;
-    private Socket socket;
+	private Socket socket;
     private File file;
 	
 	public TCPReceiver(AppData appData, File file)
 	{
-		this.appData = appData;
 		this.file = file;
 	}
 	
@@ -24,7 +20,7 @@ public class TCPReceiver implements Runnable{
 	{
         try 
         {
-            serverSocket = new ServerSocket(44444);
+			ServerSocket serverSocket = new ServerSocket(44444);
 	        try 
 	        {
 	            socket = serverSocket.accept();

@@ -4,15 +4,17 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 
-public class Config {
-	
-    public static final int DefaultUDPListenerPort = 21137;
-    public static final int DefaultUDPQueryPort = 21138;
-    public static final int DefaultTCPSenderPort = 8190;
-    public static final int DefaultTCPReceiverPort = 8191;
-    public static final int BUFFER_SIZE = 1024;	
-    public static final InetAddress IP = InetAddress.getLoopbackAddress();
-    public static InetAddress broadcastIp = null;
+class Config {
+
+    private static Config config;
+
+    static final int DefaultUDPListenerPort = 21137;
+    static final int DefaultUDPQueryPort = 21138;
+    static final int DefaultTCPSenderPort = 8190;
+    static final int DefaultTCPReceiverPort = 8191;
+    static final int BUFFER_SIZE = 1024;
+    static final InetAddress IP = InetAddress.getLoopbackAddress();
+    static InetAddress broadcastIp = null;
     static
     {
 		try {
@@ -20,5 +22,11 @@ public class Config {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+    }
+
+    public Config getInstance(){
+        if(config != null) return config;
+        else
+            return new Config();
     }
 }

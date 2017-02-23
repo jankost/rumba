@@ -4,23 +4,22 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class AppData {
+class AppData {
 
-	public int UDPListenerPort;
-	public int UDPQueryPort;
-	public int TCPReceiverPort;//
-	public int TCPSenderPort;
-	public int isFirstRun;
-	public ReentrantLock lock = new ReentrantLock(); 
-	public Condition condition = lock.newCondition();
+	int UDPListenerPort;
+	int UDPQueryPort;
+	private int TCPReceiverPort;//
+	private int TCPSenderPort;
+	int isFirstRun;
+	ReentrantLock lock = new ReentrantLock();
+	Condition condition = lock.newCondition();
 	
-	public List<InetAddress> peers;
-	public List<String> ownFiles;
+	List<InetAddress> peers;
+	List<String> ownFiles;
 	Map<InetAddress, List<String>> files;
 
 	public AppData (){
